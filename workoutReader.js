@@ -4,8 +4,14 @@ const csv = require('csv-parser');
 async function readWorkoutData(filepath) {
     return new Promise((resolve, reject) => {
         const results = [];
-        
-        fs.createReadStream(filepath)
+        let stream;
+        try {
+            stream = fs.createReadStream(filepath);
+        } catch (err) {
+            return reject(err);
+        }
+
+        stream
             .pipe(csv())
             .on('data', (row) => {
                 results.push(row);
@@ -21,7 +27,10 @@ async function readWorkoutData(filepath) {
 
 async function workoutCalculator(filepath) {
     try {
-    	const workoutData = await readWorkoutData(filepath); 
+        if (!fs.existsSync(filepath)) {
+            throw Object.assign(new Error('File not found'), { code: 'ENOENT' });
+        }
+        const workoutData = await readWorkoutData(filepath); 
         let totalWorkouts = workoutData.length; 
         let totalMinutes = 0; 
         for (let i = 0; i < workoutData.length; i++) 
