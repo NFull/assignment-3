@@ -33,6 +33,7 @@ async function workoutCalculator(filepath) {
 
         console.log('Total workouts:', totalWorkouts);
         console.log('Total minutes:', totalMinutes);
+        return { totalWorkouts, totalMinutes };
     } catch(error) {
     	if (error.code === 'ENOENT') 
             { console.log('❌ CSV file not found check the file path'); } 
@@ -42,7 +43,5 @@ async function workoutCalculator(filepath) {
     }
 
 }
-
-workoutCalculator('./data/workouts.csv');
 
 module.exports = { workoutCalculator }

@@ -4,8 +4,9 @@ async function healthMetricsCounter(filePath) {
     try {
         const data = await fs.readFile(filePath, 'utf8');
         const healthData = JSON.parse(data);
-        console.log('Success! Found your health data!');
+
         console.log('Total health entries:', healthData.metrics.length);
+        return { totalEntries: healthData.metrics.length };
         } 
     catch(error) {
     	if (error.code === 'ENOENT') 
@@ -16,9 +17,6 @@ async function healthMetricsCounter(filePath) {
             { console.log('❌ Unknown error:', error.message); } 
         return null;
     }
-
 }
-
-healthMetricsCounter('./data/health-metrics.json');
 
 module.exports = { healthMetricsCounter }
